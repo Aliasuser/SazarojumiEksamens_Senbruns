@@ -8,6 +8,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
@@ -116,6 +117,12 @@ public class ElektroniskaisTests extends JFrame{
 		
 		add(atbilzuLogs,BorderLayout.CENTER);
 		add(parbauditPoga,BorderLayout.SOUTH);
+		parbauditPoga.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parbauditAtbildi();
+			}
+		});
 		saktTestu();
 		setVisible(true);
 	}
@@ -124,6 +131,24 @@ public class ElektroniskaisTests extends JFrame{
 		jautajumuLauks.setText(jautajumi[jautajumuIndekss]);
 		for(int i = 0; i < 4; i++) {
 			atbilzuPogas[i].setText(atbilzuVarianti[jautajumuIndekss][i]);
+		}
+	}
+	
+	void parbauditAtbildi() {
+		int izvelesIndekss = -1;
+		for(int i= 0; i < 4; i++) {
+			if(atbilzuPogas[i].isSelected()) {
+				izvelesIndekss = i;
+				break;
+			}
+		}
+		if(izvelesIndekss == -1) JOptionPane.showMessageDialog(this, "Lūdzu izvēlies atbildi!", "Kļūda", JOptionPane.ERROR_MESSAGE);
+		
+		char izveletaAtbilde = (char)('a' + izvelesIndekss); //Palīdzība ņemta no ChatGPT un ar ASCII palīdzību, indekss maina atbildes variantus līdz d
+		if(izveletaAtbilde == pareizasAtbildes[jautajumuIndekss]) {
+			JOptionPane.showMessageDialog(this, "Pareizi!", "Apsveicu!", JOptionPane.INFORMATION_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(this, "Nepareizi!", "Mēģini vēlreiz!", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
