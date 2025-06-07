@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -68,7 +69,7 @@ public class ElektroniskaisTests extends JFrame{
             
             {"a) Vēl mazāks", "b) Mazāks", "c) Compile error", "d) Nekas netiks izprintēts"},
             
-            {"a) if (x > 5 AND y < 10)", "b) if (x > 5 && y < 10)", "c) if (x > 5 & y < 10)", "d) if (x > 5 || y < 10)"},
+            {"a) if (x > 5 AND y < 10)", "b) if (x > 5 || y < 10) ", "c) if (x > 5 & y < 10)", "d) if (x > 5 && y < 10)"},
             
             {"a) Ātrāka izpilde vairākiem nosacījumiem", "b) Mazāka koda rakstīšana", "c) Vieglāk salasāms", "d) Visas minētās atbildes"},
             
@@ -78,14 +79,14 @@ public class ElektroniskaisTests extends JFrame{
             
             {"a) default:", "b) case default:", "c) else:", "d) otherwise:"},
             
-            {"a) Patiess", "b) Nepatiess", "c) Compile error", "d) Runtime error"},
+            {"a) Runtime Error", "b) Nepatiess", "c) Compile error", "d) Patiess"},
             
             {"a) case 1, 2, 3:", "b) case 1: case 2: case 3:", "c) case 1 | 2 | 3:", "d) case (1,2,3):"},
             
             {"a) 3", "b) 5", "c) 7", "d) Compile error"}
         };
 	
-    char[] pareizasAtbildes = {'a', 'b', 'b', 'd', 'a', 'b', 'a', 'a', 'b', 'c'};
+    char[] pareizasAtbildes = {'a', 'b', 'd', 'd', 'a', 'b', 'a', 'd', 'b', 'c'};
     int jautajumuIndekss = 0;
     int rezultats = 0;
     boolean pirmaisMeg = true;
@@ -99,7 +100,7 @@ public class ElektroniskaisTests extends JFrame{
 		setLayout(new BorderLayout(10,10));
 		
 		jautajumuLauks = new JTextArea();
-		jautajumuLauks.setFont(new Font("Monospaced", Font.BOLD, 16));
+		jautajumuLauks.setFont(new Font("Serif", Font.BOLD, 18));
 		jautajumuLauks.setWrapStyleWord(true);
 		jautajumuLauks.setLineWrap(true);
 		jautajumuLauks.setEditable(false);
@@ -107,17 +108,20 @@ public class ElektroniskaisTests extends JFrame{
 		
 		atbilzuLogs = new JPanel();
 		atbilzuLogs.setLayout(new GridLayout(4, 1, 5, 5));
+		atbilzuLogs.setBackground(new Color(244, 244, 249));
 		atbilzuPogas = new JRadioButton[4];		
 		poguGrupa = new ButtonGroup();
 		for(int i =0; i < 4; i++) {
-			atbilzuPogas[i] = new JRadioButton("Atbildes variants " + i+1);
-			atbilzuPogas[i].setFont(new Font("Arial", Font.PLAIN, 14));
+			atbilzuPogas[i] = new JRadioButton();
+			atbilzuPogas[i].setFont(new Font("Verdana", Font.PLAIN, 14));
 			poguGrupa.add(atbilzuPogas[i]);
 			atbilzuLogs.add(atbilzuPogas[i]);
 		}
 		add(atbilzuLogs,BorderLayout.CENTER);
 		parbauditPoga = new JButton("Pārbaudīt atbildi");
-		parbauditPoga.setFont(new Font("Arial", Font.BOLD, 14));	
+		parbauditPoga.setFont(new Font("Verdana", Font.BOLD, 14));
+		parbauditPoga.setBackground(new Color(50, 168, 82));
+		parbauditPoga.setForeground(Color.WHITE);
 		add(parbauditPoga,BorderLayout.SOUTH);
 		
 		parbauditPoga.addActionListener(new ActionListener() {
@@ -149,14 +153,14 @@ public class ElektroniskaisTests extends JFrame{
 			}
 		}
 		if(izvelesIndekss == -1) {
-			JOptionPane.showMessageDialog(this, "Lūdzu izvēlies atbildi!", "Kļūda", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Lūdzu izvēlies atbildi! ❌", "Kļūda", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
 		char izveletaAtbilde = (char)('a' + izvelesIndekss); //Palīdzība ņemta no ChatGPT un ar ASCII palīdzību, indekss maina atbildes variantus līdz d
 		if(izveletaAtbilde == pareizasAtbildes[jautajumuIndekss]) {		
 			if(pirmaisMeg) rezultats++;
-			JOptionPane.showMessageDialog(this, "Pareizi!", "Apsveicu!", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Pareizi! 🎉", "Apsveicu!", JOptionPane.INFORMATION_MESSAGE);
 			jautajumuIndekss++;
 			if(jautajumuIndekss<jautajumi.length) {
 				saktTestu();
@@ -164,14 +168,15 @@ public class ElektroniskaisTests extends JFrame{
 				rezultati();
 			}
 		}else {
-			JOptionPane.showMessageDialog(this, "Nepareizi!", "Mēģini vēlreiz!", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Nepareizi! ❌", "Mēģini vēlreiz!", JOptionPane.WARNING_MESSAGE);
 			pirmaisMeg = false;
 			atbilzuPogas[izvelesIndekss].setVisible(false);
 		}
 	}
 	
 	void rezultati() {
-		String str = "Tests ir pabeigts!" + "\n\nJūsu rezultāti ar pirmo reizi: " + rezultats + " no 10";
+		String str = "Tests ir pabeigts! ✔️" + "\n\nJūsu rezultāti ar pirmo reizi: " + rezultats + " no 10" 
+		+ "\n\nTestu veidoja Arnis Šenbrūns" + "\nPaldies par spēli!";
 		JOptionPane.showMessageDialog(this, str, "Testa beigas!", JOptionPane.INFORMATION_MESSAGE);
 		int izvele = JOptionPane.showConfirmDialog(this, "Vēlreiz atkārtot testu?", "Testa atkārtošana", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if(izvele == JOptionPane.YES_OPTION) {
