@@ -88,6 +88,7 @@ public class ElektroniskaisTests extends JFrame{
 	
     char[] pareizasAtbildes = {'a', 'b', 'b', 'd', 'a', 'a', 'a', 'a', 'b', 'c'};
     int jautajumuIndekss = 0;
+    int rezultats = 0;
     
 	public ElektroniskaisTests() {
 		setSize(800, 450);
@@ -128,6 +129,7 @@ public class ElektroniskaisTests extends JFrame{
 	}
 	
 	void saktTestu() {
+		poguGrupa.clearSelection();
 		jautajumuLauks.setText(jautajumi[jautajumuIndekss]);
 		for(int i = 0; i < 4; i++) {
 			atbilzuPogas[i].setText(atbilzuVarianti[jautajumuIndekss][i]);
@@ -147,11 +149,22 @@ public class ElektroniskaisTests extends JFrame{
 		char izveletaAtbilde = (char)('a' + izvelesIndekss); //Palīdzība ņemta no ChatGPT un ar ASCII palīdzību, indekss maina atbildes variantus līdz d
 		if(izveletaAtbilde == pareizasAtbildes[jautajumuIndekss]) {
 			JOptionPane.showMessageDialog(this, "Pareizi!", "Apsveicu!", JOptionPane.INFORMATION_MESSAGE);
+			rezultats++;
+			jautajumuIndekss++;
+			if(jautajumuIndekss<jautajumi.length) {
+				saktTestu();
+			}else {
+				rezultati();
+			}
 		}else {
 			JOptionPane.showMessageDialog(this, "Nepareizi!", "Mēģini vēlreiz!", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
+	void rezultati() {
+		String str = "Tests ir pabeigts!" + "\n\nJūsu rezultāti: " + rezultats + " no 10";
+		JOptionPane.showMessageDialog(this, str, "Testa beigas!", JOptionPane.INFORMATION_MESSAGE);
+	}
 	public static void main(String[] args) {
 		new ElektroniskaisTests();
 	}
