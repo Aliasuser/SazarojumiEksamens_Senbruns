@@ -85,7 +85,7 @@ public class ElektroniskaisTests extends JFrame{
             {"a) 3", "b) 5", "c) 7", "d) Compile error"}
         };
 	
-    char[] pareizasAtbildes = {'a', 'b', 'b', 'd', 'a', 'a', 'a', 'a', 'b', 'c'};
+    char[] pareizasAtbildes = {'a', 'b', 'b', 'd', 'a', 'b', 'a', 'a', 'b', 'c'};
     int jautajumuIndekss = 0;
     int rezultats = 0;
     boolean pirmaisMeg = true;
@@ -173,6 +173,14 @@ public class ElektroniskaisTests extends JFrame{
 	void rezultati() {
 		String str = "Tests ir pabeigts!" + "\n\nJūsu rezultāti ar pirmo reizi: " + rezultats + " no 10";
 		JOptionPane.showMessageDialog(this, str, "Testa beigas!", JOptionPane.INFORMATION_MESSAGE);
+		int izvele = JOptionPane.showConfirmDialog(this, "Vēlreiz atkārtot testu?", "Testa atkārtošana", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if(izvele == JOptionPane.YES_OPTION) {
+			rezultats = 0;
+			jautajumuIndekss = 0;
+			saktTestu();
+		}else {
+			System.exit(0);
+		}
 	}
 	public static void main(String[] args) {
 		new ElektroniskaisTests();
