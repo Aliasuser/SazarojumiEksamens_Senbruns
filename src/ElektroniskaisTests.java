@@ -7,11 +7,10 @@ import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.SwingConstants;
+import javax.swing.JTextArea;
 
 public class ElektroniskaisTests extends JFrame{
 	/**
@@ -19,7 +18,7 @@ public class ElektroniskaisTests extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	JLabel jautajumuLauks;
+	JTextArea jautajumuLauks;
 	JRadioButton[] atbilzuPogas;
 	JButton parbauditPoga;
 	ButtonGroup poguGrupa;
@@ -89,6 +88,7 @@ public class ElektroniskaisTests extends JFrame{
     char[] pareizasAtbildes = {'a', 'b', 'b', 'd', 'a', 'a', 'a', 'a', 'b', 'c'};
     int jautajumuIndekss = 0;
     int rezultats = 0;
+    boolean pirmaisMeg = true;
     
 	public ElektroniskaisTests() {
 		setSize(800, 450);
@@ -98,9 +98,11 @@ public class ElektroniskaisTests extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout(10,10));
 		
-		jautajumuLauks = new JLabel("Tests");
+		jautajumuLauks = new JTextArea();
 		jautajumuLauks.setFont(new Font("Monospaced", Font.BOLD, 16));
-		jautajumuLauks.setHorizontalAlignment(SwingConstants.CENTER);
+		jautajumuLauks.setWrapStyleWord(true);
+		jautajumuLauks.setLineWrap(true);
+		jautajumuLauks.setEditable(false);
 		add(jautajumuLauks,BorderLayout.NORTH);
 		
 		atbilzuLogs = new JPanel();
@@ -113,11 +115,11 @@ public class ElektroniskaisTests extends JFrame{
 			poguGrupa.add(atbilzuPogas[i]);
 			atbilzuLogs.add(atbilzuPogas[i]);
 		}
-		parbauditPoga = new JButton("Pārbaudīt atbildi");
-		parbauditPoga.setFont(new Font("Arial", Font.BOLD, 14));
-		
 		add(atbilzuLogs,BorderLayout.CENTER);
+		parbauditPoga = new JButton("Pārbaudīt atbildi");
+		parbauditPoga.setFont(new Font("Arial", Font.BOLD, 14));	
 		add(parbauditPoga,BorderLayout.SOUTH);
+		
 		parbauditPoga.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -130,9 +132,11 @@ public class ElektroniskaisTests extends JFrame{
 	
 	void saktTestu() {
 		poguGrupa.clearSelection();
+		pirmaisMeg = true;
 		jautajumuLauks.setText(jautajumi[jautajumuIndekss]);
 		for(int i = 0; i < 4; i++) {
 			atbilzuPogas[i].setText(atbilzuVarianti[jautajumuIndekss][i]);
+			atbilzuPogas[i].setVisible(true);
 		}
 	}
 	
@@ -144,12 +148,15 @@ public class ElektroniskaisTests extends JFrame{
 				break;
 			}
 		}
-		if(izvelesIndekss == -1) JOptionPane.showMessageDialog(this, "Lūdzu izvēlies atbildi!", "Kļūda", JOptionPane.ERROR_MESSAGE);
+		if(izvelesIndekss == -1) {
+			JOptionPane.showMessageDialog(this, "Lūdzu izvēlies atbildi!", "Kļūda", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		
 		char izveletaAtbilde = (char)('a' + izvelesIndekss); //Palīdzība ņemta no ChatGPT un ar ASCII palīdzību, indekss maina atbildes variantus līdz d
-		if(izveletaAtbilde == pareizasAtbildes[jautajumuIndekss]) {
+		if(izveletaAtbilde == pareizasAtbildes[jautajumuIndekss]) {		
+			if(pirmaisMeg) rezultats++;
 			JOptionPane.showMessageDialog(this, "Pareizi!", "Apsveicu!", JOptionPane.INFORMATION_MESSAGE);
-			rezultats++;
 			jautajumuIndekss++;
 			if(jautajumuIndekss<jautajumi.length) {
 				saktTestu();
@@ -158,11 +165,13 @@ public class ElektroniskaisTests extends JFrame{
 			}
 		}else {
 			JOptionPane.showMessageDialog(this, "Nepareizi!", "Mēģini vēlreiz!", JOptionPane.WARNING_MESSAGE);
+			pirmaisMeg = false;
+			atbilzuPogas[izvelesIndekss].setVisible(false);
 		}
 	}
 	
 	void rezultati() {
-		String str = "Tests ir pabeigts!" + "\n\nJūsu rezultāti: " + rezultats + " no 10";
+		String str = "Tests ir pabeigts!" + "\n\nJūsu rezultāti ar pirmo reizi: " + rezultats + " no 10";
 		JOptionPane.showMessageDialog(this, str, "Testa beigas!", JOptionPane.INFORMATION_MESSAGE);
 	}
 	public static void main(String[] args) {
